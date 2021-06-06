@@ -9,6 +9,8 @@ import java.util.Scanner;
 
 public class TemperatureConverter {
   Scanner input = new Scanner(System.in);
+  final String cString = "Celsius";
+  final String fString = "Fahrenheit";
 
   public static void main(String[] args) {
     TemperatureConverter temp = new TemperatureConverter();
@@ -23,22 +25,34 @@ public class TemperatureConverter {
   }
 
   public String convert(String unitString) {
+    String out = "The temperature in ";
     double output;
-    System.out.print("Please enter the temperature in ");
     if (unitString.equalsIgnoreCase("c")) {
-      System.out.print("Fahrenheit: ");
-      double f = input.nextDouble();
-      output = (f - 32) * 5 / 9;
-      return String.format("The temperature in Celsius is %.2f.", output);
+      out = out + cString + " is";
+      output = (convertVal(fString) - 32) * 5 / 9;
     }
     else if (unitString.equalsIgnoreCase("f")) {
-      System.out.print("Celsius: ");
-      double c = input.nextDouble();
-      output = (c * 9 / 5) + 32;
-      return String.format("The temperature in Fahrenheit is %.2f.", output);
+      out = out + fString + " is";
+      output = (convertVal(cString) * 9 / 5) + 32;
     }
     else {
-      return "ERROR: Temperature Format invalid, Run Program Again!";
+      System.out.println("ERROR: Temperature Format invalid, Start over!");
+      String units = getUnits();
+      return convert(units);
     }
+    return String.format("%s %.2f.", out, output);
+  }
+
+  public double convertVal(String fromString) {
+    System.out.printf("Please enter the temperature in %s: ", fromString);
+    String n = input.next();
+    try {
+      Double.parseDouble(n);
+    }
+    catch (NumberFormatException e) {
+      System.out.println("ERROR: Invalid Input, Try Again!");
+      return convertVal(fromString);
+    }
+    return Double.parseDouble(n);
   }
 }
